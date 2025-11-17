@@ -16,6 +16,7 @@
             --gradient-brand: linear-gradient(45deg, #00e5ff, #0077ff);
             --brand-gold-color: #FFC107;
         }
+        html { overflow-y: scroll; }
         body { background-color: #0d1117; color: var(--primary-text); font-family: 'Noto Sans Bengali', sans-serif; margin: 0; padding: 10px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; min-height: 100vh; font-size: 15px; box-sizing: border-box;}
         
         .container { 
@@ -52,7 +53,7 @@
         .button:active { transform: scale(0.98); }
         .button:disabled { background: #555; cursor: not-allowed; }
         .app-container { background-color: transparent; padding: 0; border-radius: 0; box-shadow: none; }
-        .home-header { text-align: center; margin-bottom: 20px; padding: 15px; background: var(--surface-color); border-radius: 15px; border: 1px solid #333;}
+        .home-header { text-align: center; margin-bottom: 20px; padding: 15px; background: var(--surface-color); border-radius: 15px; border: 1px solid #333; min-height: 90px;}
         .home-header p { margin: 8px 0; font-size: 16px; font-weight: bold; }
         
         .nav-menu { display: flex; justify-content: space-around; background-color: #2C2C2E; padding: 10px 5px; border-radius: 50px; margin-top: 20px; position: sticky; bottom: 15px; z-index: 100; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6); border: 1px solid #444;}
@@ -77,7 +78,7 @@
 
         .telegram-home-link { display: block; text-align: center; text-decoration: none; margin: 20px auto; background: linear-gradient(45deg, #0088cc, #00aaff); padding: 12px; font-size: 15px; border-radius: 12px; color: white; }
 
-        .tournament-list-container { display: flex; flex-direction: column; align-items: center; gap: 20px; max-height: 60vh; overflow-y: auto; padding: 10px; }
+        .tournament-list-container { display: flex; flex-direction: column; align-items: center; gap: 20px; max-height: 60vh; overflow-y: auto; padding: 10px; min-height: 150px; }
         .tournament-card { background: #1C1C1E; width: 100%; max-width: 320px; border-radius: 25px; padding: 20px; border: 2px solid var(--brand-gold-color); box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); text-align: center; box-sizing: border-box; }
         .tournament-card h3 { margin-top: 0; margin-bottom: 20px; font-size: 20px; color: var(--primary-text); border-bottom: 1px solid #444; }
         .card-details { margin: 15px 0; font-size: 15px; }
@@ -134,9 +135,13 @@
         @keyframes drop-in { 0% { transform: translateY(-20px) scale(1.2) rotate(0deg); opacity: 0; } 50% { transform: translateY(0) scale(0.9) rotate(180deg); opacity: 1; } 100% { transform: scale(1) rotate(360deg); } }
         .spin-home-piece { animation: spin-home 0.6s linear; }
         @keyframes spin-home { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+        
         .notice-board { background: linear-gradient(145deg, rgba(48, 176, 255, 0.1), rgba(0, 119, 255, 0.1)); border: 1px solid var(--brand-color); border-radius: 15px; padding: 15px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(48, 176, 255, 0.2); }
         .notice-board h3 { margin-top: 0; color: var(--brand-color); text-align: center; border-bottom: none; }
-        .notice-board p { margin-bottom: 0; color: #eee; font-size: 14px; text-align: center; }
+        .marquee-container { overflow: hidden; white-space: nowrap; }
+        .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
+        #notice-content { margin-bottom: 0; color: #eee; font-size: 14px; text-align: center; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
     
         #admin-panel {
             display: none; width: 100%; max-width: 450px;
@@ -182,7 +187,12 @@
                     <p id="home-bdt-balance"></p>
                     <p id="home-shib-balance"></p>
                 </div>
-                <div class="notice-board"><h3>📢 নোটিশ বোর্ড</h3><p id="notice-content">লোড হচ্ছে...</p></div>
+                <div class="notice-board">
+                    <h3>📢 নোটিশ বোর্ড</h3>
+                    <div class="marquee-container">
+                        <p id="notice-content" class="marquee-text">লোড হচ্ছে...</p>
+                    </div>
+                </div>
                 <a id="telegram-home-link" href="#" target="_blank" class="telegram-home-link" style="display: none;">🪆 হেল্পলাইন টেলিগ্রাম গ্রুপ জয়েন্ট করুন 🪆</a>
                 <h3 class="section-title">চলমান টুর্নামেন্ট</h3>
                 <div class="tournament-list-container"><div id="tournament-list"></div></div>
@@ -217,7 +227,7 @@
         
         <!-- Other Pages and Modals -->
         <div id="game-page" class="page"><div class="game-page-container"><div class="ludo-header"><h1 id="tournament-game-title">টুর্নামেন্ট ম্যাচ</h1></div><div class="ludo-board-container"><div id="ludo-board" class="ludo-board"></div></div><div class="ludo-game-controls"><div id="ludo-game-info"></div><div id="ludo-dice-container">🎲</div><button class="button" id="ludo-roll-dice-btn">ডাইস রোল করুন</button></div></div></div>
-        <div id="transaction-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 id="modal-title" style="margin-top:0;"></h2><div id="deposit-content" style="display: none;"><select id="deposit-method"><option value="" disabled selected>পেমেন্ট মাধ্যম বাছাই করুন</option><option value="Rocket">রকেট (Bangladesh)</option><option value="MBank">MBank (Kyrgyzstan)</option><option value="BNB">BNB (Crypto)</option></select><div id="rocket-deposit-info" class="payment-info" style="display: none;"><p><strong>নিচের রকেট নম্বরে Send Money করুন:</strong></p><div class="admin-number"><span id="rocket-number-text">...</span><button class="copy-btn" data-copy-target="rocket-number-text">কপি</button></div></div><div id="mbank-deposit-info" class="payment-info" style="display: none;"><p><strong>নিচের MBank নম্বরে টাকা পাঠান:</strong></p><div class="admin-number"><span id="mbank-number-text">...</span><button class="copy-btn" data-copy-target="mbank-number-text">কপি</button></div></div><div id="bnb-deposit-info" class="payment-info" style="display: none;"><p><strong>নিচের BNB এড্রেসে কয়েন সেন্ড করুন:</strong></p><div class="admin-number"><span id="bnb-address-text">...</span><button class="copy-btn" data-copy-target="bnb-address-text">কপি</button></div></div><input type="number" id="deposit-amount" placeholder="আপনি কত টাকা পাঠিয়েছেন?"><input type="text" id="deposit-trx-id" placeholder="আপনার Transaction ID দিন"><button class="button" id="confirm-deposit-btn">অনুরোধ পাঠান</button></div><div id="withdraw-content" style="display: none;"><input type="number" id="withdraw-amount" placeholder="টাকার পরিমাণ লিখুন"><input type="text" id="withdraw-account-number" placeholder="আপনার অ্যাকাউন্ট নম্বর দিন"><button class="button" id="confirm-withdraw-btn">অনুরোধ পাঠান</button></div></div></div>
+        <div id="transaction-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 id="modal-title" style="margin-top:0;"></h2><div id="deposit-content" style="display: none;"><select id="deposit-method"><option value="" disabled selected>পেমেন্ট মাধ্যম বাছাই করুন</option><option value="Rocket">রকেট (Bangladesh)</option><option value="MBank">MBank (Kyrgyzstan)</option><option value="BNB">BNB (Crypto)</option></select><div id="rocket-deposit-info" class="payment-info" style="display: none;"><p><strong>নিচের রকেট নম্বরে Send Money করুন:</strong></p><div class="admin-number"><span id="rocket-number-text">...</span><button class="copy-btn" data-copy-target="rocket-number-text">কপি</button></div></div><div id="mbank-deposit-info" class="payment-info" style="display: none;"><p><strong>নিচের MBank নম্বরে টাকা পাঠান:</strong></p><div class="admin-number"><span id="mbank-number-text">...</span><button class="copy-btn" data-copy-target="mbank-number-text">কপি</button></div></div><div id="bnb-deposit-info" class="payment-info" style="display: none;"><p><strong>নিচের BNB এড্রেসে কয়েন সেন্ড করুন:</strong></p><div class="admin-number"><span id="bnb-address-text">...</span><button class="copy-btn" data-copy-target="bnb-address-text">কপি</button></div></div><input type="number" id="deposit-amount" placeholder="আপনি কত টাকা পাঠিয়েছেন?"><input type="text" id="deposit-trx-id" placeholder="আপনার Transaction ID দিন"><button class="button" id="confirm-deposit-btn">অনুরোধ পাঠান</button></div><div id="withdraw-content" style="display: none;"><p id="min-withdraw-info" style="font-size: 14px; color: #ccc; text-align: center; margin-bottom: 10px;"></p><input type="number" id="withdraw-amount" placeholder="টাকার পরিমাণ লিখুন"><input type="text" id="withdraw-account-number" placeholder="আপনার অ্যাকাউন্ট নম্বর দিন"><button class="button" id="confirm-withdraw-btn">অনুরোধ পাঠান</button></div></div></div>
         <div id="shibainu-transfer-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 style="margin-top:0;">SHIBAINU ট্রান্সফার</h2><p style="font-size: 14px; color: #ccc;">কনভার্সন রেট: 11,000 SHIB = 10 ৳</p><input type="number" id="shibainu-transfer-amount" placeholder="SHIBAINU পরিমাণ লিখুন"><button class="button" id="confirm-shibainu-transfer">ট্রান্সফার করুন</button></div></div>
         <div id="start-game-confirm-modal" class="modal"><div class="modal-content" style="text-align: center;"><p style="font-size: 16px; line-height: 1.6; margin-bottom: 25px;">🎲লুডু গেম শুরু হয়ে গেলে আপনি যদি কেটে বেরিয়ে পড়েন তাহলে ওই গেমটি হেরে যাবেন। আরও বিস্তারিত জানতে টেলিগ্রাম গ্রুপে জয়েন করতে পারেন🎲</p><div class="action-buttons"><button class="button" id="confirm-back-btn" style="background: #555;">BACK</button><button class="button" id="confirm-ok-btn">OK</button></div></div></div>
         
@@ -249,9 +259,7 @@
         function unlockAudio() {
             if (isAudioUnlocked) return;
             const sounds = document.querySelectorAll('audio');
-            sounds.forEach(sound => {
-                sound.play().then(() => sound.pause()).catch(() => {});
-            });
+            sounds.forEach(sound => { sound.play().then(() => sound.pause()).catch(() => {}); });
             isAudioUnlocked = true;
             document.body.removeEventListener('click', unlockAudio);
             document.body.removeEventListener('touchstart', unlockAudio);
@@ -259,14 +267,7 @@
         document.body.addEventListener('click', unlockAudio);
         document.body.addEventListener('touchstart', unlockAudio);
 
-        function playSound(soundId) {
-            if (!isAudioUnlocked) return;
-            try {
-                const sound = document.getElementById(soundId);
-                if (sound) { sound.currentTime = 0; sound.play().catch(e => {}); }
-            } catch (e) { console.error("Error playing sound:", e); }
-        }
-
+        function playSound(soundId) { if (!isAudioUnlocked) return; try { const sound = document.getElementById(soundId); if (sound) { sound.currentTime = 0; sound.play().catch(e => {}); } } catch (e) { console.error("Error playing sound:", e); } }
         function showToast(message) { const t=document.getElementById('custom-toast');t.textContent=message;t.className='show';setTimeout(()=>{t.className=t.className.replace('show','')},3000); }
         function showPage(pageId) { document.querySelectorAll('.container > .page').forEach(p => p.classList.remove('active')); document.getElementById(pageId)?.classList.add('active'); }
         function showSubPage(pageId) { document.querySelectorAll('#app-wrapper .page').forEach(p => p.classList.remove('active')); document.getElementById(pageId)?.classList.add('active'); }
@@ -279,37 +280,19 @@
 
         document.getElementById("login-button").addEventListener("click", () => { playSound('sound-click'); const n=document.getElementById("login-name").value.trim(), p=document.getElementById("login-password").value; if(!n||!p)return showToast("নাম ও পাসওয়ার্ড দিন।"); db.ref("users/"+n).once("value").then(s=>{ if(s.exists()&&s.val().password===p){sessionStorage.setItem("loggedInUser",n);showAppScreen(n);}else{showToast("ভুল নাম বা পাসওয়ার্ড!");}});});
         
-        document.getElementById("register-button").addEventListener("click", () => {
-            playSound('sound-click');
-            const n = document.getElementById("register-name").value.trim();
-            const p = document.getElementById("register-password").value;
-            if (!n || !p) return showToast("নাম ও পাসওয়ার্ড দিন।");
-            if (/[.#$\[\]]/.test(n)) return showToast("নামে বিশেষ অক্ষর ব্যবহার করা যাবে না।");
-            db.ref("users/" + n).once("value").then(s => {
-                if (s.exists()) {
-                    showToast("এই নামে অ্যাকাউন্ট রয়েছে।");
-                } else {
-                    const newUser = { password: p, balance: 0, shibainuBalance: 2000 };
-                    db.ref("users/" + n).set(newUser).then(() => {
-                        showToast("রেজিস্ট্রেশন সফল!");
-                        alert("🎉 অভিনন্দন! 🎉\nআপনি সাইনআপ বোনাস হিসেবে 2000 SHIB কয়েন পেয়েছেন।");
-                    });
-                }
-            });
-        });
+        document.getElementById("register-button").addEventListener("click", () => { playSound('sound-click'); const n = document.getElementById("register-name").value.trim(), p = document.getElementById("register-password").value; if (!n || !p) return showToast("নাম ও পাসওয়ার্ড দিন।"); if (/[.#$\[\]]/.test(n)) return showToast("নামে বিশেষ অক্ষর ব্যবহার করা যাবে না।"); db.ref("users/" + n).once("value").then(s => { if (s.exists()) { showToast("এই নামে অ্যাকাউন্ট রয়েছে।"); } else { db.ref("users/" + n).set({ password: p, balance: 0, shibainuBalance: 2000 }).then(() => { showToast("রেজিস্ট্রেশন সফল!"); alert("🎉 অভিনন্দন! 🎉\nআপনি সাইনআপ বোনাস হিসেবে 2000 SHIB কয়েন পেয়েছেন।"); }); } }); });
 
-        function initializeAdminPanel() {
-            db.ref('onlineUsers').on('value', s => { const l=document.getElementById('online-users-list'), c=document.getElementById('online-users-count'); l.innerHTML = ''; if (s.exists()) { const u = s.val(); c.innerText = Object.keys(u).length; Object.keys(u).forEach(i => { const li = document.createElement('li'); li.textContent = i; l.appendChild(li); }); } else { c.innerText = '0'; l.innerHTML = '<li>এখন কেউ অনলাইনে নেই</li>'; } });
-            db.ref('tournaments').orderByChild('status').equalTo('playing').on('value', s => { const l=document.getElementById('active-games-list'); l.innerHTML = ''; if (s.exists()) { s.forEach(cs => { const g = cs.val(); const p = g.players ? Object.keys(g.players).join(', ') : 'N/A'; const li = document.createElement('li'); li.textContent = `${g.name} (খেলোয়াড়: ${p})`; l.appendChild(li); }); } else { l.innerHTML = '<li>এখন কোনো খেলা চলছে না</li>'; } });
-        }
+        function initializeAdminPanel() { db.ref('onlineUsers').on('value', s => { const l=document.getElementById('online-users-list'), c=document.getElementById('online-users-count'); l.innerHTML = ''; if (s.exists()) { const u = s.val(); c.innerText = Object.keys(u).length; Object.keys(u).forEach(i => { const li = document.createElement('li'); li.textContent = i; l.appendChild(li); }); } else { c.innerText = '0'; l.innerHTML = '<li>এখন কেউ অনলাইনে নেই</li>'; } }); db.ref('tournaments').orderByChild('status').equalTo('playing').on('value', s => { const l=document.getElementById('active-games-list'); l.innerHTML = ''; if (s.exists()) { s.forEach(cs => { const g = cs.val(); const p = g.players ? Object.keys(g.players).join(', ') : 'N/A'; const li = document.createElement('li'); li.textContent = `${g.name} (খেলোয়াড়: ${p})`; l.appendChild(li); }); } else { l.innerHTML = '<li>এখন কোনো খেলা চলছে না</li>'; } }); }
+        
+        function checkForPersonalMessage(username) { const messageRef = db.ref(`users/${username}/personalMessage`); messageRef.once('value', snapshot => { if (snapshot.exists()) { const messageData = snapshot.val(); if (messageData.messageText && !messageData.isRead) { alert(`📣 অ্যাডমিনের পক্ষ থেকে আপনার জন্য একটি মেসেজ:\n\n${messageData.messageText}`); messageRef.update({ isRead: true }); } } }); }
 
         function showAppScreen(username) {
             showPage('app-wrapper'); showSubPage('home-page'); 
+            checkForPersonalMessage(username);
             loadUserProfile(username); loadTournaments(); loadTransactionHistory(username); 
             loadMatchHistory(username); loadShibainuTransferHistory(username);
             const onlineRef = db.ref(`onlineUsers/${username}`);
-            onlineRef.onDisconnect().remove();
-            onlineRef.set(true);
+            onlineRef.onDisconnect().remove(); onlineRef.set(true);
             if (username === "Admin") { document.getElementById("admin-panel").style.display = "block"; initializeAdminPanel(); }
             db.ref("settings").on("value", s => { 
                 siteSettings = s.val() || {}; 
@@ -319,66 +302,109 @@
                 document.getElementById('notice-content').innerText = siteSettings.notice || 'এখন কোনো নতুন নোটিশ নেই।'; 
                 const link = document.getElementById('telegram-home-link');
                 if (siteSettings.telegramLink) { link.href = siteSettings.telegramLink; link.style.display = 'block'; } else { link.style.display = 'none'; }
+                
+                // উইথড্র লিমিট প্রদর্শনের জন্য নতুন লজিক
+                const minWithdrawInfo = document.getElementById('min-withdraw-info');
+                let withdrawText = '';
+                if (siteSettings.minWithdraw > 0) { withdrawText += `ন্যূনতম ${siteSettings.minWithdraw} ৳`; }
+                if (siteSettings.maxWithdraw > 0) { if (withdrawText) withdrawText += ' এবং '; withdrawText += `সর্বোচ্চ ${siteSettings.maxWithdraw} ৳`; }
+                if (withdrawText) { minWithdrawInfo.innerText = `${withdrawText} উইথড্র করতে পারবেন।`; } else { minWithdrawInfo.innerText = ''; }
             }); 
         }
 
-        function loadUserProfile(username) { 
-            db.ref("users/"+username).on("value", s => { 
-                if (s.exists()) { 
-                    const d = s.val();
-                    const bdt = (d.balance || 0).toFixed(2);
-                    const shib = new Intl.NumberFormat().format(d.shibainuBalance || 0);
-                    document.getElementById('home-username').innerHTML = `🎁 ${username} 🎁`;
-                    document.getElementById("home-bdt-balance").innerHTML = `🏦 ব্যালেন্স 👉💵 ${bdt} 💵`;
-                    document.getElementById("home-shib-balance").innerHTML = `🗳️ শিবাকয়েন 🦊 ${shib} 🦊`;
-                    document.getElementById('profile-username').innerText = username; 
-                    document.getElementById("profile-bdt-balance").innerText = bdt; 
-                    document.getElementById("profile-shib-balance").innerText = shib;
-                    document.getElementById("shibainu-balance-display").innerText = shib; 
-                } 
-            }); 
-        }
+        function loadUserProfile(username) { db.ref("users/"+username).on("value", s => { if (s.exists()) { const d = s.val(), bdt = (d.balance || 0).toFixed(2), shib = new Intl.NumberFormat().format(d.shibainuBalance || 0); document.getElementById('home-username').innerHTML = `🎁 ${username} 🎁`; document.getElementById("home-bdt-balance").innerHTML = `🏦 ব্যালেন্স 👉💵 ${bdt} 💵`; document.getElementById("home-shib-balance").innerHTML = `🗳️ শিবাকয়েন 🦊 ${shib} 🦊`; document.getElementById('profile-username').innerText = username; document.getElementById("profile-bdt-balance").innerText = bdt; document.getElementById("profile-shib-balance").innerText = shib; document.getElementById("shibainu-balance-display").innerText = shib; } }); }
         
-        function loadTransactionHistory(username) { db.ref("requests").orderByChild("username").equalTo(username).on("value", s => { const cont = document.getElementById("history-container"); cont.innerHTML = "<li>লোড হচ্ছে...</li>"; const reqs = []; if (s.exists()) { s.forEach(c => { const data = c.val(); if(['deposit', 'withdraw', 'penalty'].includes(data.type)) { reqs.push(data); } }); } if(reqs.length === 0) { cont.innerHTML = "<li>কোনো লেনদেন পাওয়া যায়নি।</li>"; return; } cont.innerHTML = ""; reqs.reverse().slice(0, 10).forEach(req => { const item = document.createElement("li"); const date = new Date(req.date).toLocaleString('bn-BD',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); let typeText, typeColor; switch(req.type) { case 'deposit': typeText = 'ডিপোজিট'; typeColor = '#28a745'; break; case 'withdraw': typeText = 'উইথড্র'; typeColor = '#dc3545'; break; case 'penalty': typeText = 'জরিমানা'; typeColor = '#ffc107'; break; } item.innerHTML = `<div><span>${typeText}</span><span style="float:right;color:${typeColor}">${req.type === 'withdraw' || req.type === 'penalty' ? '-' : '+'}${req.amount} ৳</span></div><div style="font-size:12px;color:#ccc;"><span>${date}</span><span style="float:right;">${req.status}</span></div>`; cont.appendChild(item); }); }); }
+        function loadTransactionHistory(username) { db.ref("requests").orderByChild("username").equalTo(username).limitToLast(10).on("value", s => { const cont = document.getElementById("history-container"); cont.innerHTML = "<li>লোড হচ্ছে...</li>"; const reqs = []; if (s.exists()) { s.forEach(c => { const data = c.val(); if(['deposit', 'withdraw', 'penalty'].includes(data.type)) { reqs.push(data); } }); } if(reqs.length === 0) { cont.innerHTML = "<li>কোনো লেনদেন পাওয়া যায়নি।</li>"; return; } cont.innerHTML = ""; reqs.reverse().forEach(req => { const item = document.createElement("li"); const date = new Date(req.date).toLocaleString('bn-BD',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); let typeText, typeColor; switch(req.type) { case 'deposit': typeText = 'ডিপোজিট'; typeColor = '#28a745'; break; case 'withdraw': typeText = 'উইথড্র'; typeColor = '#dc3545'; break; case 'penalty': typeText = 'জরিমানা'; typeColor = '#ffc107'; break; } item.innerHTML = `<div><span>${typeText}</span><span style="float:right;color:${typeColor}">${req.type === 'withdraw' || req.type === 'penalty' ? '-' : '+'}${req.amount} ৳</span></div><div style="font-size:12px;color:#ccc;"><span>${date}</span><span style="float:right;">${req.status}</span></div>`; cont.appendChild(item); }); }); }
         
-        // ===== নতুন ফরম্যাটে ম্যাচ ইতিহাস =====
-        function loadMatchHistory(username) { 
-            const cont = document.getElementById("match-history-container"); 
-            cont.innerHTML = "<li>লোড হচ্ছে...</li>"; 
-            db.ref(`users/${username}/matchHistory`).limitToLast(10).on("value", s => { 
-                if (!s.exists()) { cont.innerHTML = "<li>কোনো ম্যাচের ইতিহাস পাওয়া যায়নি।</li>"; return; } 
-                const matches = []; 
-                s.forEach(c => matches.push(c.val())); 
-                cont.innerHTML = ""; 
-                matches.reverse().forEach(match => { 
-                    const item = document.createElement("li"); 
-                    const date = new Date(match.date).toLocaleString('bn-BD',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
-                    item.innerHTML = `
-                        <div style="font-weight: bold; line-height: 1.6;">
-                            <span>🎲 বিজয়ী 👉 ${username} 👈</span><br>
-                            <span>🎲 এন্টি ফি 👉 ${match.entryFee} ৳ 👈</span><br>
-                            <span>🎲 প্রথম প্রাইজ 👉 ${match.prize} ৳ 👈</span>
-                        </div>
-                        <div style="font-size:12px; color:#ccc; margin-top: 4px; text-align: right;">${date}</div>
-                    `;
-                    cont.appendChild(item); 
-                }); 
-            }); 
-        }
+        function loadMatchHistory(username) { const cont = document.getElementById("match-history-container"); cont.innerHTML = "<li>লোড হচ্ছে...</li>"; db.ref(`users/${username}/matchHistory`).limitToLast(10).on("value", s => { if (!s.exists()) { cont.innerHTML = "<li>কোনো ম্যাচের ইতিহাস পাওয়া যায়নি।</li>"; return; } const matches = []; s.forEach(c => matches.push(c.val())); cont.innerHTML = ""; matches.reverse().forEach(match => { const item = document.createElement("li"); const date = new Date(match.date).toLocaleString('bn-BD',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); item.innerHTML = `<div style="font-weight: bold; line-height: 1.6;"><span>🎲 বিজয়ী 👉 ${username} 👈</span><br><span>🎲 এন্টি ফি 👉 ${match.entryFee} ৳ 👈</span><br><span>🎲 প্রথম প্রাইজ 👉 ${match.prize} ৳ 👈</span></div><div style="font-size:12px; color:#ccc; margin-top: 4px; text-align: right;">${date}</div>`; cont.appendChild(item); }); }); }
         
         function loadShibainuTransferHistory(username) { const cont = document.getElementById("shibainu-history-container"); cont.innerHTML = "<li>লোড হচ্ছে...</li>"; db.ref(`users/${username}/shibainuHistory`).limitToLast(10).on("value", s => { if (!s.exists()) { cont.innerHTML = "<li>কোনো ট্রান্সফার ইতিহাস পাওয়া যায়নি।</li>"; return; } const history = []; s.forEach(c => history.push(c.val())); cont.innerHTML = ""; history.reverse().forEach(item => { const li = document.createElement("li"); const date = new Date(item.date).toLocaleString('bn-BD',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); const shibFormatted = new Intl.NumberFormat().format(item.shibAmount); li.innerHTML = `<div class="history-item"><div><strong>SHIB to BDT</strong><div class="date">${date}</div></div><div class="amount">+${item.bdtAmount.toFixed(2)}৳ (${shibFormatted} SHIB)</div></div>`; cont.appendChild(li); }); }); }
-        function loadTournaments() { const list = document.getElementById("tournament-list"); Object.values(activeTimers).forEach(clearInterval); activeTimers = {}; db.ref("tournaments").orderByChild("status").equalTo("waiting").on("value", s => { list.innerHTML = ""; if (!s.exists()) { list.innerHTML = '<p style="text-align:center; color:#888;">এই মুহূর্তে কোনো টুর্নামেন্ট চালু নেই।</p>'; return; } s.forEach(cs => { const t = cs.val(), id = cs.key; const card = document.createElement("div"); card.className = "tournament-card"; card.id = `card-${id}`; let feeText = `<span>${t.entryFee||0} ৳</span>`; if (t.shibEntryFee && t.shibEntryFee > 0) { feeText += ` / <span>${new Intl.NumberFormat().format(t.shibEntryFee)} SHIB</span>`; } card.innerHTML = `<h3>${t.name}</h3><div class="card-details"><div class="card-details-item"><span>এন্ট্রি ফি:</span> <div>${feeText}</div></div><div class="card-details-item"><span>অ্যাডমিন ফি:</span> <span>${t.adminFee||0} ৳</span></div><div class="card-details-item"><span>১ম পুরস্কার:</span> <span>${t.firstPrize||0} ৳</span></div><div class="card-details-item"><span>২য় পুরস্কার:</span> <span>${t.secondPrize||0} ৳</span></div></div><div class="countdown-timer" id="timer-${id}"></div><div id="button-container-${id}"></div>`; list.appendChild(card); startTournamentCountdown(id, t); }); }); }
-        function startTournamentCountdown(id, tData) { const timerEl = document.getElementById(`timer-${id}`), btnContainer = document.getElementById(`button-container-${id}`); if (!timerEl || !tData.gameDate || !tData.gameTime) { if(timerEl) timerEl.innerHTML = "সময় নির্ধারিত হয়নি"; return; } const targetDate = new Date(`${tData.gameDate}T${tData.gameTime}`); const updateTimer = () => { if(!document.getElementById(`timer-${id}`)) { clearInterval(activeTimers[id]); return; } const dist = targetDate.getTime() - new Date().getTime(); const user = sessionStorage.getItem("loggedInUser"); const isJoined = tData.players && tData.players[user]; if (dist < 1000) { clearInterval(activeTimers[id]); timerEl.innerHTML = "ম্যাচ শুরু করার জন্য প্রস্তুত"; if (isJoined) { btnContainer.innerHTML = `<button class="button start-game-btn" data-id="${id}">গেম শুরু করুন</button>`; } else { btnContainer.innerHTML = `<button class="button" disabled>সময় শেষ</button>`; } } else { const hrs = String(Math.floor((dist % 864e5) / 36e5)).padStart(2, '0'), mins = String(Math.floor((dist % 36e5) / 6e4)).padStart(2, '0'), secs = String(Math.floor((dist % 6e4) / 1e3)).padStart(2, '0'); timerEl.innerHTML = `শুরু হতে বাকি: ${hrs}:${mins}:${secs}`; if (!isJoined && (tData.players ? Object.keys(tData.players).length : 0) < tData.playerLimit) { btnContainer.innerHTML = `<button class="button join-btn" data-id="${id}">যোগ দিন</button>`; } else if (isJoined) { btnContainer.innerHTML = `<button class="button" disabled style="background:#dc3545">আপনি জয়েন করেছেন</button>`; } else { btnContainer.innerHTML = `<button class="button" disabled>সম্পূর্ণ</button>`; } } }; updateTimer(); activeTimers[id] = setInterval(updateTimer, 1000); }
+        
+        function loadTournaments() { const list = document.getElementById("tournament-list"); Object.values(activeTimers).forEach(clearInterval); activeTimers = {}; db.ref("tournaments").orderByChild("status").equalTo("waiting").on("value", s => { list.innerHTML = ""; if (!s.exists()) { list.innerHTML = '<p style="text-align:center; color:#888;">এই মুহূর্তে কোনো টুর্নামেন্ট চালু নেই।</p>'; return; } s.forEach(cs => { const t = cs.val(), id = cs.key; const card = document.createElement("div"); card.className = "tournament-card"; card.id = `card-${id}`; let feeText = `<span>${t.entryFee||0} ৳</span>`; if (t.shibEntryFee > 0) { feeText += ` / <span>${new Intl.NumberFormat().format(t.shibEntryFee)} SHIB</span>`; } let adminFeeText = `<span>${t.adminFee||0} ৳</span>`; if (t.shibAdminFee > 0) { adminFeeText += ` / <span>${new Intl.NumberFormat().format(t.shibAdminFee)} SHIB</span>`; } let prize1Text = `<span>${t.firstPrize||0} ৳</span>`; if (t.shibPrize1 > 0) { prize1Text += ` / <span>${new Intl.NumberFormat().format(t.shibPrize1)} SHIB</span>`; } let prize2Text = `<span>${t.secondPrize||0} ৳</span>`; if (t.shibPrize2 > 0) { prize2Text += ` / <span>${new Intl.NumberFormat().format(t.shibPrize2)} SHIB</span>`; } let gameTypeDetailsHTML = ''; if (t.gameType === 'vs_computer') { gameTypeDetailsHTML = `<div class="card-details-item" style="justify-content: center; background: none;"><span style="font-weight: bold; color: var(--brand-color);">জয়েন্ট করে খেলা শুরু করুন</span></div>`; } else { gameTypeDetailsHTML = `<div class="card-details-item" style="justify-content: center; background: none;"><span style="font-size: 13px; color: #ffc107; line-height: 1.4;">💶টেলিগ্রাম গ্রুপে জয়েন্ট না করলে কেশআউট করতে সমস্যা হতে পারে।💶</span></div>`; } card.innerHTML = `<h3>${t.name}</h3><div class="card-details">${gameTypeDetailsHTML}<div class="card-details-item"><span>এন্ট্রি ফি:</span> <div>${feeText}</div></div><div class="card-details-item"><span>অ্যাডমিন ফি:</span> <div>${adminFeeText}</div></div><div class="card-details-item"><span>১ম পুরস্কার:</span> <div>${prize1Text}</div></div><div class="card-details-item"><span>২য় পুরস্কার:</span> <div>${prize2Text}</div></div></div><div class="countdown-timer" id="timer-${id}"></div><div id="button-container-${id}"></div>`; list.appendChild(card); startTournamentCountdown(id, t); }); }); }
+        
+        function startTournamentCountdown(id, tData) {
+            const timerEl = document.getElementById(`timer-${id}`), btnContainer = document.getElementById(`button-container-${id}`);
+            if (!timerEl) return;
+            if (tData.gameType === 'vs_computer') {
+                timerEl.innerHTML = `🎲খেলা চলবে আনলিমিটেট🎲`;
+                btnContainer.innerHTML = `<button class="button join-btn" data-id="${id}">🎲লুডু খেলা শুরু করুন 🎲</button>`;
+                return;
+            }
+            if (!tData.gameDate || !tData.gameTime) { timerEl.innerHTML = "সময় নির্ধারিত হয়নি"; return; }
+            const targetDate = new Date(`${tData.gameDate}T${tData.gameTime}`);
+            const updateTimer = () => {
+                if(!document.getElementById(`timer-${id}`)) { clearInterval(activeTimers[id]); return; }
+                const dist = targetDate.getTime() - new Date().getTime();
+                const user = sessionStorage.getItem("loggedInUser"), isJoined = tData.players && tData.players[user];
+                if (dist < 1000) {
+                    clearInterval(activeTimers[id]);
+                    timerEl.innerHTML = "ম্যাচ শুরু করার জন্য প্রস্তুত";
+                    if (isJoined) { btnContainer.innerHTML = `<button class="button start-game-btn" data-id="${id}">গেম শুরু করুন</button>`; } else { btnContainer.innerHTML = `<button class="button" disabled>সময় শেষ</button>`; }
+                } else {
+                    const hrs = String(Math.floor((dist % 864e5) / 36e5)).padStart(2, '0'), mins = String(Math.floor((dist % 36e5) / 6e4)).padStart(2, '0'), secs = String(Math.floor((dist % 6e4) / 1e3)).padStart(2, '0');
+                    timerEl.innerHTML = `শুরু হতে বাকি: ${hrs}:${mins}:${secs}`;
+                    if (!isJoined && (tData.players ? Object.keys(tData.players).length : 0) < tData.playerLimit) { btnContainer.innerHTML = `<button class="button join-btn" data-id="${id}">যোগ দিন</button>`; } else if (isJoined) { btnContainer.innerHTML = `<button class="button" disabled style="background:#dc3545">আপনি জয়েন করেছেন</button>`; } else { btnContainer.innerHTML = `<button class="button" disabled>সম্পূর্ণ</button>`; }
+                }
+            };
+            updateTimer(); activeTimers[id] = setInterval(updateTimer, 1000);
+        }
+
+        function startGame(tournamentId) {
+            document.getElementById('loader-overlay').style.display = 'flex';
+            db.ref('tournaments/' + tournamentId).once('value').then(snap => {
+                const t = snap.val();
+                showPage('game-page');
+                document.getElementById('tournament-game-title').innerText = t.name;
+                const finalP = [], p = t.players ? Object.keys(t.players) : [];
+                const bots = ["মানিক", "মনির", "হাসান", "Habib", "Kulak", "Manik", "muni", "babu", "selim", "Hasem", "Sujon", "Jahidul", "jahid", "Ritu", "Kasem", "khukumoni", "Samina", "marisa"].sort(() => 0.5 - Math.random());
+                p.forEach(pl => finalP.push({username: pl, isBot: false}));
+                for(let i=0; i < (t.playerLimit || 2) - p.length; i++) { finalP.push({username: bots.pop() || `বট ${i+1}`, isBot: true}); }
+                LudoGame.startTournamentGame(finalP, t.numPieces || 4, t);
+                document.getElementById('loader-overlay').style.display = 'none';
+            });
+        }
         
         document.getElementById("tournament-list").addEventListener("click", e => { if(e.target.classList.contains("start-game-btn")){ playSound('sound-click'); currentGameData.tournamentId = e.target.dataset.id; document.getElementById('start-game-confirm-modal').style.display = 'flex'; } if(e.target.classList.contains("join-btn")){ playSound('sound-click'); db.ref(`tournaments/${e.target.dataset.id}`).once('value').then(s => { if (!s.exists()) return; const t = s.val(); currentGameData.tournamentId = e.target.dataset.id; const p = document.getElementById('payment-options-container'); p.innerHTML = ''; if (t.entryFee > 0) p.innerHTML += `<button class="button" data-fee="${t.entryFee}" data-currency="bdt">Pay ${t.entryFee} ৳</button>`; if (t.shibEntryFee > 0) p.innerHTML += `<button class="button" style="background: #4CAF50;" data-fee="${t.shibEntryFee}" data-currency="shib">Pay ${new Intl.NumberFormat().format(t.shibEntryFee)} SHIB</button>`; if (p.innerHTML) document.getElementById('payment-choice-modal').style.display = 'flex'; else showToast('এই টুর্নামেন্টে যোগ দেওয়া যাচ্ছে না।'); }); } });
+        
         const paymentChoiceModal = document.getElementById('payment-choice-modal');
         paymentChoiceModal.querySelector('.close-button').addEventListener('click', () => paymentChoiceModal.style.display = 'none');
-        document.getElementById('payment-options-container').addEventListener('click', e => { if (e.target.tagName !== 'BUTTON') return; playSound('sound-click'); paymentChoiceModal.style.display = 'none'; const user = sessionStorage.getItem("loggedInUser"), currency = e.target.dataset.currency, fee = parseFloat(e.target.dataset.fee), tId = currentGameData.tournamentId; let path = currency === 'bdt' ? `users/${user}/balance` : `users/${user}/shibainuBalance`; db.ref(path).transaction(bal => { if ((bal || 0) >= fee) return bal - fee; }).then(r => { if (r.committed) { db.ref(`tournaments/${tId}/players/${user}`).set(true); showToast("টুর্নামেন্টে যোগ দিয়েছেন!"); } else { showToast(`অপর্যাপ্ত ${currency === 'bdt' ? 'ব্যালেন্স' : 'SHIB ব্যালেন্স'}।`); } }); });
+        
+        document.getElementById('payment-options-container').addEventListener('click', e => {
+            if (e.target.tagName !== 'BUTTON') return;
+            playSound('sound-click');
+            paymentChoiceModal.style.display = 'none';
+            const user = sessionStorage.getItem("loggedInUser"), currency = e.target.dataset.currency, fee = parseFloat(e.target.dataset.fee), tId = currentGameData.tournamentId;
+            let path = currency === 'bdt' ? `users/${user}/balance` : `users/${user}/shibainuBalance`;
+            db.ref(path).transaction(bal => { if ((bal || 0) >= fee) return bal - fee; }).then(r => {
+                if (r.committed) {
+                    db.ref(`tournaments/${tId}`).once('value').then(s => {
+                        if (!s.exists()) return;
+                        const t = s.val();
+                        if (t.gameType === 'vs_computer') {
+                            const playerUpdate = { [user]: true };
+                            const updates = { [`tournaments/${tId}/players`]: playerUpdate, [`tournaments/${tId}/status`]: 'playing' };
+                            db.ref().update(updates).then(() => { showToast("খেলা শুরু হচ্ছে..."); startGame(tId); });
+                        } else {
+                            db.ref(`tournaments/${tId}/players/${user}`).set(true).then(() => { showToast("টুর্নামেন্টে যোগ দিয়েছেন!"); });
+                        }
+                    });
+                } else { showToast(`অপর্যাপ্ত ${currency === 'bdt' ? 'ব্যালেন্স' : 'SHIB ব্যালেন্স'}।`); }
+            });
+        });
+        
         const confirmModal = document.getElementById('start-game-confirm-modal');
         document.getElementById('confirm-back-btn').addEventListener('click', () => { playSound('sound-click'); confirmModal.style.display = 'none'; });
-        document.getElementById('confirm-ok-btn').addEventListener('click', () => { playSound('sound-click'); confirmModal.style.display = 'none'; document.getElementById('loader-overlay').style.display = 'flex'; db.ref('tournaments/' + currentGameData.tournamentId).update({ status: 'playing' }); db.ref('tournaments/' + currentGameData.tournamentId).once('value').then(s => { const t = s.val(), p = t.players ? Object.keys(t.players) : []; showPage('game-page'); document.getElementById('tournament-game-title').innerText = t.name; const finalP = []; const bots = ["মানিক", "মনির", "হাসান", "Habib", "Kulak", "Manik", "muni", "babu", "selim", "Hasem", "Sujon", "Jahidul", "jahid", "Ritu", "Kasem", "khukumoni", "Samina", "marisa"].sort(() => 0.5 - Math.random()); p.forEach(pl => finalP.push({username: pl, isBot: false})); for(let i=0; i<(t.playerLimit || 2) - p.length; i++) { finalP.push({username: bots.pop() || `বট ${i+1}`, isBot: true}); } LudoGame.startTournamentGame(finalP, t.numPieces || 4, t); document.getElementById('loader-overlay').style.display = 'none'; }); });
+        document.getElementById('confirm-ok-btn').addEventListener('click', () => { playSound('sound-click'); confirmModal.style.display = 'none'; db.ref('tournaments/' + currentGameData.tournamentId).update({ status: 'playing' }).then(()=>startGame(currentGameData.tournamentId)); });
 
-        function handlePrizeDistribution(winnerInfo, prizeType, prizeAmount, tournamentData) { if (!winnerInfo || winnerInfo.isBot) { if(winnerInfo) showToast(`${winnerInfo.username} ${prizeType} স্থান অধিকার করেছে।`); return; } const winner = winnerInfo.username; db.ref(`users/${winner}/balance`).transaction(bal => (bal || 0) + prizeAmount); db.ref(`users/${winner}/matchHistory`).push({ tournamentName: tournamentData.name, entryFee: tournamentData.entryFee, prize: prizeAmount, rank: prizeType, date: new Date().toISOString() }); showToast(`অভিনন্দন ${winner}! আপনি ${prizeType} পুরস্কার হিসেবে ${prizeAmount} ৳ জিতেছেন।`); }
+        function handlePrizeDistribution(winnerInfo, prizeType, tournamentData) {
+            if (!winnerInfo || winnerInfo.isBot) { if(winnerInfo) showToast(`${winnerInfo.username} ${prizeType} স্থান অধিকার করেছে।`); return; }
+            const winner = winnerInfo.username;
+            const prizeAmount = prizeType === '১ম' ? (tournamentData.firstPrize || 0) : (tournamentData.secondPrize || 0);
+            const shibPrizeAmount = prizeType === '১ম' ? (tournamentData.shibPrize1 || 0) : (tournamentData.shibPrize2 || 0);
+            if (prizeAmount > 0) { db.ref(`users/${winner}/balance`).transaction(bal => (bal || 0) + prizeAmount); showToast(`অভিনন্দন! আপনি ${prizeType} পুরস্কার হিসেবে ${prizeAmount} ৳ জিতেছেন।`); }
+            if (shibPrizeAmount > 0) { db.ref(`users/${winner}/shibainuBalance`).transaction(bal => (bal || 0) + shibPrizeAmount); showToast(`অভিনন্দন! আপনি ${prizeType} পুরস্কার হিসেবে ${shibPrizeAmount} SHIB জিতেছেন।`); }
+            db.ref(`users/${winner}/matchHistory`).push({ tournamentName: tournamentData.name, entryFee: tournamentData.entryFee, prize: prizeAmount, shibPrize: shibPrizeAmount, rank: prizeType, date: new Date().toISOString() });
+        }
         
         document.getElementById("logout-button").addEventListener("click", () => { const user = sessionStorage.getItem("loggedInUser"); if (user) { db.ref(`onlineUsers/${user}`).remove(); } sessionStorage.removeItem("loggedInUser"); window.location.reload(); });
         const transModal = document.getElementById("transaction-modal");
@@ -386,17 +412,22 @@
         document.getElementById("withdraw-btn").addEventListener("click", () => { playSound('sound-click'); transModal.style.display="flex"; document.getElementById("withdraw-content").style.display="block"; document.getElementById("deposit-content").style.display="none"; document.getElementById("modal-title").innerText="Withdraw"; });
         document.querySelector("#transaction-modal .close-button").addEventListener("click", () => transModal.style.display = "none");
         
-        // ===== কপি বাটনের জন্য নতুন ইভেন্ট লিসেনার =====
-        document.getElementById('transaction-modal').addEventListener('click', function(e) {
-            if (e.target && e.target.matches('.copy-btn')) {
-                const targetId = e.target.dataset.copyTarget;
-                const textToCopy = document.getElementById(targetId).innerText;
-                copyToClipboard(textToCopy);
-            }
+        document.getElementById('transaction-modal').addEventListener('click', function(e) { if (e.target && e.target.matches('.copy-btn')) { const targetId = e.target.dataset.copyTarget; const textToCopy = document.getElementById(targetId).innerText; copyToClipboard(textToCopy); } });
+        document.getElementById("confirm-deposit-btn").addEventListener("click", () => { const user=sessionStorage.getItem("loggedInUser"), data={username:user,date:new Date().toISOString(),status:"Pending",type:"deposit",method:document.getElementById("deposit-method").value, amount:parseFloat(document.getElementById("deposit-amount").value),trxId:document.getElementById("deposit-trx-id").value}; if(!data.method||!data.amount) return showToast("সকল তথ্য পূরণ করুন।"); db.ref("requests").push(data).then(() => { showToast("আপনার অনুরোধটি পাঠানো হয়েছে।"); transModal.style.display="none";}); });
+        
+        document.getElementById("confirm-withdraw-btn").addEventListener("click", () => {
+            const amount = parseFloat(document.getElementById("withdraw-amount").value);
+            const minWithdraw = siteSettings.minWithdraw || 0;
+            const maxWithdraw = siteSettings.maxWithdraw || 0;
+
+            if (minWithdraw > 0 && amount < minWithdraw) { return showToast(`ন্যূনতম উইথড্র পরিমাণ ${minWithdraw} ৳।`); }
+            if (maxWithdraw > 0 && amount > maxWithdraw) { return showToast(`সর্বোচ্চ উইথড্র পরিমাণ ${maxWithdraw} ৳।`); }
+
+            const user=sessionStorage.getItem("loggedInUser"), data={username:user,date:new Date().toISOString(),status:"Pending",type:"withdraw",amount: amount,number:document.getElementById("withdraw-account-number").value};
+            if(!data.amount || data.amount <= 0 || !data.number) return showToast("সকল তথ্য সঠিকভাবে পূরণ করুন।");
+            db.ref("requests").push(data).then(() => { showToast("আপনার অনুরোধটি পাঠানো হয়েছে।"); transModal.style.display="none";});
         });
 
-        document.getElementById("confirm-deposit-btn").addEventListener("click", () => { const user=sessionStorage.getItem("loggedInUser"), data={username:user,date:new Date().toISOString(),status:"Pending",type:"deposit",method:document.getElementById("deposit-method").value, amount:parseFloat(document.getElementById("deposit-amount").value),trxId:document.getElementById("deposit-trx-id").value}; if(!data.method||!data.amount) return showToast("সকল তথ্য পূরণ করুন।"); db.ref("requests").push(data).then(() => { showToast("আপনার অনুরোধটি পাঠানো হয়েছে।"); transModal.style.display="none";}); });
-        document.getElementById("confirm-withdraw-btn").addEventListener("click", () => { const user=sessionStorage.getItem("loggedInUser"), data={username:user,date:new Date().toISOString(),status:"Pending",type:"withdraw",amount:parseFloat(document.getElementById("withdraw-amount").value),number:document.getElementById("withdraw-account-number").value}; if(!data.amount||!data.number) return showToast("সকল তথ্য পূরণ করুন।"); db.ref("requests").push(data).then(() => { showToast("আপনার অনুরোধটি পাঠানো হয়েছে।"); transModal.style.display="none";}); });
         document.getElementById('deposit-method').addEventListener('change', e => { ['rocket','mbank','bnb'].forEach(id=>document.getElementById(`${id}-deposit-info`).style.display='none'); const method = e.target.value, trxIdInput = document.getElementById('deposit-trx-id'); if(method) document.getElementById(`${method.toLowerCase()}-deposit-info`).style.display='block'; const showTrx = ['Rocket', 'MBank', 'BNB'].includes(method); document.getElementById('deposit-amount').style.display = showTrx?'block':'none'; trxIdInput.style.display = showTrx?'block':'none'; document.getElementById('confirm-deposit-btn').style.display = showTrx?'block':'none'; if(method==='BNB') trxIdInput.placeholder='আপনার Transaction Hash (TxID) দিন'; else if (method==='MBank') trxIdInput.placeholder='আপনার Transaction Number দিন'; else trxIdInput.placeholder = 'আপনার Transaction ID দিন'; });
         
         document.getElementById("watch-ad-btn").addEventListener("click", () => { if (siteSettings.adLink) { showToast("বিজ্ঞাপনে ক্লিক করে ৫ সেকেন্ড অপেক্ষা করুন"); sessionStorage.setItem('adOpenedTime', Date.now()); window.open(siteSettings.adLink, "_blank"); } else { showToast("এখন কোনো বিজ্ঞাপন উপলব্ধ নেই।"); } });
@@ -412,8 +443,8 @@
         function onRollDice() { if (gameState !== 'roll') return; clearTimeout(inactivityTimer); gameState = 'rolling'; rollBtn.disabled = true; playSound('sound-dice-roll'); diceEl.classList.add('rolling'); const flickerInterval = setInterval(() => { diceEl.textContent = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'][Math.floor(Math.random() * 6)]; }, 60); setTimeout(() => { clearInterval(flickerInterval); diceEl.classList.remove('rolling'); const rand = Math.random(); if (consecutiveSixes < 2 && rand < 0.3) { diceValue = 6; } else { diceValue = Math.floor(Math.random() * 5) + 1; } diceEl.textContent = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'][diceValue - 1]; if (diceValue === 6) { consecutiveSixes++; } else { consecutiveSixes = 0; } if (consecutiveSixes > 2) { showToast("পর পর তিনবার ৬! চাল পচা গেলো।"); bonusTurn = false; setTimeout(switchPlayer, 1200); return; } gameState = 'move'; bonusTurn = diceValue === 6; const movable = getMovablePieces(currentPlayers[currentPlayerIndex]); if (movable.length === 0) { showToast("কোনো চাল দেওয়া সম্ভব নয়।"); setTimeout(switchPlayer, 1000); } else if (isBot[currentPlayers[currentPlayerIndex]]) { setTimeout(() => { const best = chooseBestMove(movable); movePiece(best.color, best.id); }, 1000); } else { updateTurnInfo('আপনার গুটি নির্বাচন করুন'); movable.forEach(p => pieceEls[p.color][p.id].classList.add('movable')); } }, 250); }
         function onPieceClick(e){const p=e.currentTarget;if(piecePos[p.dataset.color][p.dataset.id]==='base'){p.classList.add('spin-home-piece');p.addEventListener('animationend',()=>p.classList.remove('spin-home-piece'),{once:true});}if(!p.classList.contains('movable')||gameState!=='move')return;movePiece(p.dataset.color,p.dataset.id)} function movePiece(c,id){gameState='moving';document.querySelectorAll('.movable').forEach(p=>p.classList.remove('movable'));updateTurnInfo();const pos=piecePos[c][id],pathResult=calculateNewPosition(c,pos,diceValue);if(pathResult.isPossible){playSound('sound-piece-move');animatePieceMove(pieceEls[c][id],pathResult,()=>postAnimationLogic(c,id,pathResult.pos,pathResult.finished))}} function postAnimationLogic(c,id,n,f){piecePos[c][id]=f?'finished':n;let cap=false;if(f){bonusTurn=true;playSound('sound-piece-home')}if(!f&&n!=='finished'){cap=handleCapture(n,c);if(cap){playSound('sound-piece-capture')}}renderBoard();if(checkForWin(c)){processWinner(c);return}if(bonusTurn||cap){showToast(cap?"গুটি কেটে বোনাস টার্ন!":f?"গুটি পেকে বোনাস টার্ন!":"৬ এর জন্য বোনাস টার্ন!");gameState='roll';checkIfBotTurn()}else{switchPlayer()}} async function animatePieceMove(p,pathResult,cb){const animPiece=p.cloneNode(true);if(p.parentElement)p.parentElement.appendChild(animPiece);p.style.opacity='0';if(!pathResult.path||pathResult.path.length===0){const startCell=document.getElementById(`cell-${pathResult.pos}`);if(startCell)startCell.appendChild(animPiece);animPiece.classList.add('drop-in-animation')}else{const lastCellId=pathResult.path[pathResult.path.length-1];for(const id of pathResult.path){const c=document.getElementById(`cell-${id}`);if(c){c.appendChild(animPiece);if(id===lastCellId)animPiece.classList.add('drop-in-animation')}await new Promise(r=>setTimeout(r,150))}}setTimeout(()=>{if(boardEl.contains(animPiece))animPiece.remove();p.style.opacity='1';cb()},500)} function getMovablePieces(c){return Object.keys(piecePos[c]||{}).map(id=>({color:c,id})).filter(p=>canMove(p.color,p.id))} function canMove(c,id){const p=piecePos[c][id];if(p==='finished'||p==='inactive')return false;if(p==='base')return diceValue===6;return calculateNewPosition(c,p,diceValue).isPossible} function handleCapture(p,a){if(!p||safeSpots.includes(p)||p>100)return false;let cap=false;for(const c of currentPlayers){if(c===a)continue;for(const id in piecePos[c]){if(piecePos[c][id]===p){piecePos[c][id]='base';bonusTurn=true;cap=true;break}}if(cap)break}return cap} function calculateNewPosition(c,pos,s){const p=playerPaths[c];if(pos==='base')return{pos:startCells[c],finished:false,isPossible:true,path:[]};const i=p.indexOf(pos);if(i===-1)return{isPossible:false};const nI=i+s;if(nI>=p.length)return{isPossible:false};const aP=p.slice(i+1,nI+1),isF=nI===p.length-1,fP=isF?'finished':p[nI];return{pos:fP,finished:isF,isPossible:true,path:aP}} 
         function chooseBestMove(m) { const getScore = p => { const cP = piecePos[p.color][p.id]; const { pos: nP, finished } = calculateNewPosition(p.color, cP, diceValue); let score = 0; if (finished) score += 1000; if (nP && !safeSpots.includes(nP) && nP < 100) { for (const c of currentPlayers) if (c !== p.color && Object.values(piecePos[c]).includes(nP)) score += 500; } if (cP === 'base' && diceValue === 6) score += 100; score += playerPaths[p.color].indexOf(nP); return score; }; const sortedMoves = m.sort((a, b) => getScore(b) - getScore(a)); if (isVsComputerMatch) { const userWinPercentage = 65; if (Math.random() * 100 > userWinPercentage && sortedMoves.length > 1) { return sortedMoves[sortedMoves.length - 1]; } } return sortedMoves[0]; } 
-        function checkForWin(c){const finishedCount = Object.values(piecePos[c]).filter(p=>p==='finished').length; return finishedCount === activePieceCount; } function cleanUpListeners() { if(presenceRef) presenceRef.onDisconnect().cancel(); presenceRef.remove(); if(activePlayersRef) activePlayersRef.off(); clearTimeout(inactivityTimer); gameState = 'finished'; }
-        function processWinner(color) { const winnerInfo = playerMap[color]; if (!winnerInfo || winnersList.some(w => w.username === winnerInfo.username)) return; winnersList.push(winnerInfo); playSound('sound-game-win'); const winnerModal = document.getElementById('winner-modal'); const winnerModalTitle = document.getElementById('winner-modal-title'); const winnerModalBody = document.getElementById('winner-modal-body'); if (winnersList.length === 1) { handlePrizeDistribution(winnerInfo, '১ম', tournamentData.firstPrize || 0, tournamentData); if (initialPlayerCount <= 2) { rollBtn.disabled = true; db.ref('tournaments/' + currentGameData.tournamentId).update({ status: 'finished' }); cleanUpListeners(); winnerModalTitle.innerText = '🎉 অভিনন্দন! 🎉'; winnerModalBody.innerHTML = `বিজয়ী: <strong>${winnerInfo.username}</strong>`; winnerModal.style.display = 'flex'; setTimeout(() => window.location.reload(), 3000); return; } else { infoEl.textContent = `🎉 ${winnerInfo.username} ১ম স্থান!`; currentPlayers = currentPlayers.filter(p => p !== color); if (currentPlayers.length > 1) switchPlayer(); else if (currentPlayers.length === 1) processWinner(currentPlayers[0]); } } else if (winnersList.length === 2) { handlePrizeDistribution(winnerInfo, '২য়', tournamentData.secondPrize || 0, tournamentData); rollBtn.disabled = true; db.ref('tournaments/' + currentGameData.tournamentId).update({ status: 'finished' }); cleanUpListeners(); winnerModalTitle.innerText = '🎉 টুর্নামেন্ট সমাপ্ত 🎉'; winnerModalBody.innerHTML = `১ম স্থান: <strong>${winnersList[0].username}</strong><br>২য় স্থান: <strong>${winnersList[1].username}</strong>`; winnerModal.style.display = 'flex'; setTimeout(() => window.location.reload(), 3000); } }
+        function checkForWin(c){const finishedCount = Object.values(piecePos[c]).filter(p=>p==='finished').length; return finishedCount === activePieceCount; } function cleanUpListeners() { if(presenceRef) presenceRef.onDisconnect().cancel(); if(presenceRef) presenceRef.remove(); if(activePlayersRef) activePlayersRef.off(); clearTimeout(inactivityTimer); gameState = 'finished'; }
+        function processWinner(color) { const winnerInfo = playerMap[color]; if (!winnerInfo || winnersList.some(w => w.username === winnerInfo.username)) return; winnersList.push(winnerInfo); playSound('sound-game-win'); const winnerModal = document.getElementById('winner-modal'); const winnerModalTitle = document.getElementById('winner-modal-title'); const winnerModalBody = document.getElementById('winner-modal-body'); if (winnersList.length === 1) { handlePrizeDistribution(winnerInfo, '১ম', tournamentData); if (initialPlayerCount <= 2) { rollBtn.disabled = true; if(currentGameData.tournamentId) db.ref('tournaments/' + currentGameData.tournamentId).update({ status: 'finished' }); cleanUpListeners(); winnerModalTitle.innerText = '🎉 অভিনন্দন! 🎉'; winnerModalBody.innerHTML = `বিজয়ী: <strong>${winnerInfo.username}</strong>`; winnerModal.style.display = 'flex'; setTimeout(() => window.location.reload(), 3000); return; } else { infoEl.textContent = `🎉 ${winnerInfo.username} ১ম স্থান!`; currentPlayers = currentPlayers.filter(p => p !== color); if (currentPlayers.length > 1) switchPlayer(); else if (currentPlayers.length === 1) processWinner(currentPlayers[0]); } } else if (winnersList.length === 2) { handlePrizeDistribution(winnerInfo, '২য়', tournamentData); rollBtn.disabled = true; if(currentGameData.tournamentId) db.ref('tournaments/' + currentGameData.tournamentId).update({ status: 'finished' }); cleanUpListeners(); winnerModalTitle.innerText = '🎉 টুর্নামেন্ট সমাপ্ত 🎉'; winnerModalBody.innerHTML = `১ম স্থান: <strong>${winnersList[0].username}</strong><br>২য় স্থান: <strong>${winnersList[1].username}</strong>`; winnerModal.style.display = 'flex'; setTimeout(() => window.location.reload(), 3000); } }
         function switchPlayer(){setTimeout(()=>{consecutiveSixes = 0; if(currentPlayers.length>0){currentPlayerIndex=(currentPlayerIndex+1)%currentPlayers.length;if(currentPlayerIndex>=currentPlayers.length)currentPlayerIndex=0;}gameState='roll';diceEl.textContent='🎲';checkIfBotTurn()},500)} function checkIfBotTurn(){if(gameState === 'finished' || currentPlayers.length === 0) return; updateTurnInfo(); const cPColor = currentPlayers[currentPlayerIndex]; const cPData = playerMap[cPColor]; rollBtn.disabled = isBot[cPColor]; clearTimeout(inactivityTimer); if(isBot[cPColor]) { setTimeout(onRollDice,1500); } else if (isVsComputerMatch) { inactivityTimer = setTimeout(() => applyPenalty(cPData.username), 120000); } } function applyPenalty(username) { showToast("নিষ্ক্রিয়তার জন্য 5৳জরিমানা করা হয়েছে।"); rollBtn.disabled = true; cleanUpListeners(); db.ref('users/' + username).transaction(data => { if (data) data.balance = (data.balance || 0) - 5; return data; }); db.ref('requests').push({username, amount: 5, date: new Date().toISOString(), status: 'Completed', type: 'penalty'}); const otherPlayerColor = currentPlayers.find(c => c !== Object.keys(playerMap).find(key => playerMap[key].username === username)); processWinner(otherPlayerColor); } function updateTurnInfo(m=''){if(!currentPlayers[currentPlayerIndex]) return; const cC=currentPlayers[currentPlayerIndex],cN=playerMap[cC].username,cH={red:'#f44336',green:'#4caf50',yellow:'#ffeb3b',blue:'#2196f3'};infoEl.style.color=cH[cC];if(m)infoEl.textContent=m;else infoEl.textContent=isBot[cC]?`${cN}-এর চাল...`:`${cN}-এর চাল`}
         
         function startTournamentGame(players, numPieces, tData){
@@ -427,15 +458,13 @@
             const initiatorData = (initiatorIndex !== -1) ? remainingPlayers.splice(initiatorIndex, 1)[0] : null;
 
             if (players.length === 2) {
-                // 2 Player Diagonal Setup
                 const otherPlayer = remainingPlayers[0];
                 playerMap['blue'] = initiatorData;
                 playerMap['green'] = otherPlayer;
-                isBot['blue'] = initiatorData.isBot;
+                isBot['blue'] = initiatorData ? initiatorData.isBot : false;
                 isBot['green'] = otherPlayer.isBot;
                 currentPlayers = ['blue', 'green'];
             } else {
-                // 3 or 4 Player Setup
                 if(initiatorData) {
                     playerMap['blue'] = initiatorData;
                     isBot['blue'] = initiatorData.isBot;
@@ -452,7 +481,7 @@
             }
             
             const isUserInGame = players.some(p => p.username === initiatorUsername && !p.isBot);
-            if (isUserInGame && !isVsComputerMatch) { 
+            if (isUserInGame && !isVsComputerMatch && tData.gameType !== 'vs_computer') { 
                 presenceRef = db.ref(`tournaments/${currentGameData.tournamentId}/activePlayers/${initiatorUsername}`); 
                 activePlayersRef = db.ref(`tournaments/${currentGameData.tournamentId}/activePlayers`); 
                 presenceRef.onDisconnect().remove(); 
